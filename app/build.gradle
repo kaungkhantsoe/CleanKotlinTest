@@ -1,0 +1,114 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.kks.cleankotlintest"
+        minSdk 21
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+        mock {
+            buildConfigField("String", "BASE_URL", "")
+            buildConfigField("String", "DATABASE_NAME", "\"movies.db\"")
+        }
+        dev {
+            buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
+            buildConfigField("String", "IMAGE_URL", "\"https://image.tmdb.org/t/p/w500\"")
+            buildConfigField("String", "DATABASE_NAME", "\"movies.db\"")
+            buildConfigField("String", "API_KEY", "\"9a327fe2ad719f692e33ddefd210c47e\"")
+        }
+        prod {
+            buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
+            buildConfigField("String", "IMAGE_URL", "\"https://image.tmdb.org/t/p/w500\"")
+            buildConfigField("String", "DATABASE_NAME", "\"movies.db\"")
+            buildConfigField("String", "API_KEY", "\"9a327fe2ad719f692e33ddefd210c47e\"")
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation 'androidx.fragment:fragment-ktx:1.3.3'
+
+
+    // Rx
+    implementation("io.reactivex.rxjava3:rxkotlin:$rxkotlin_version")
+
+    // Lifecycle components
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-extensions:$lifecycle_extension_version")
+
+    // Swipe refresh
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:$swipe_refresh_version")
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    // Okhttp
+    implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:$glide_version")
+    kapt("com.github.bumptech.glide:compiler:$glide_version")
+
+    // Room
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
+    // Timber
+    implementation("com.jakewharton.timber:timber:$timber_version")
+
+    // Koin
+    //Kotlin DI
+    implementation("org.koin:koin-android:$koin_version")
+    implementation("org.koin:koin-androidx-viewmodel:$koin_version")
+    implementation("org.koin:koin-core:$koin_version")
+
+}
