@@ -1,6 +1,7 @@
 package com.kks.cleankotlintest.presentation.model
 
 import com.kks.cleankotlintest.core.domain.MovieListRequest as DomainMovieList
+
 /**
  * Created by kaungkhantsoe on 18/05/2021.
  **/
@@ -13,7 +14,7 @@ data class MovieListVO(
     var status_message: String? = null,
     var success: Boolean? = null,
     var errors: Array<String>? = null
-    ) {
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -48,10 +49,20 @@ data class MovieListVO(
     }
 }
 
-fun DomainMovieList.toPresentationModel(): MovieListVO = MovieListVO (
+fun DomainMovieList.toPresentationModel(): MovieListVO = MovieListVO(
     page,
     results?.map {
-        return@map MovieVO(it.id,it.original_title ?: "",it.poster_path ?: "",it.overview ?: "",page,it.isLiked)
+        return@map MovieVO(
+            it.id,
+            it.original_title ?: "",
+            it.poster_path ?: "",
+            it.overview ?: "",
+            page,
+            it.isPLiked,
+            it.isULiked,
+            it.ptype,
+            it.utype
+        )
     },
     total_pages,
     total_results,
@@ -61,7 +72,7 @@ fun DomainMovieList.toPresentationModel(): MovieListVO = MovieListVO (
     errors
 )
 
-fun MovieListVO.toDomainModel(): DomainMovieList = DomainMovieList (
+fun MovieListVO.toDomainModel(): DomainMovieList = DomainMovieList(
     page,
     results?.map(MovieVO::toDomainModel),
     total_pages,

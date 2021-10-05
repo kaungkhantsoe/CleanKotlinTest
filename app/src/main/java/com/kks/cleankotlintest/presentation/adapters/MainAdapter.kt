@@ -9,11 +9,13 @@ import com.kks.cleankotlintest.databinding.ItemMovieBinding
 import com.kks.cleankotlintest.callback.MainListener
 import com.kks.cleankotlintest.common.BaseAdapter
 import com.kks.cleankotlintest.common.inflate
+import com.kks.cleankotlintest.constants.MovieType
 import com.kks.cleankotlintest.extensions.showImage
 import com.kks.cleankotlintest.presentation.model.MovieVO
 
 class MainAdapter(
-    private val listener: MainListener
+    private val listener: MainListener,
+    private val movieType: MovieType
 ) : BaseAdapter() {
 
     override fun onCreateCustomViewHolder(
@@ -45,7 +47,9 @@ class MainAdapter(
 
             view.context.showImage(
                 binding.ivLike,
-                if (movieVO.isLiked == 1) R.drawable.ic_like else R.drawable.ic_like_disable
+                if (movieType == MovieType.POPULAR)
+                    if (movieVO.isPLiked == 1) R.drawable.ic_like else R.drawable.ic_like_disable
+                else if (movieVO.isULiked == 1) R.drawable.ic_like else R.drawable.ic_like_disable
             )
 
             view.context.showImage(

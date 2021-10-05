@@ -14,7 +14,7 @@ import com.kks.cleankotlintest.presentation.model.MovieVO
 @Database(
     entities = [MovieVO::class],
     exportSchema = false,
-    version = 4
+    version = 6
 )
 abstract class AppDb : RoomDatabase() {
     abstract fun MovieDao(): MovieDao

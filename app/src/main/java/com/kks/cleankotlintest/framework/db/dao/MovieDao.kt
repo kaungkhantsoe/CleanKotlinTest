@@ -18,8 +18,11 @@ interface MovieDao {
     @Query("SELECT * FROM movie WHERE id = :id ")
     fun getMovieWith(id: Int): MovieVO?
 
-    @Query("SELECT * FROM movie WHERE pageNumber = :pageNumber")
-    fun getMoviesFrom(pageNumber: Int): List<MovieVO>
+    @Query("SELECT * FROM movie WHERE pageNumber = :pageNumber AND ptype = :type")
+    fun getPopularMoviesFrom(pageNumber: Int, type: Int): List<MovieVO>
+
+    @Query("SELECT * FROM movie WHERE pageNumber = :pageNumber AND utype = :type")
+    fun getUpcomingMoviesFrom(pageNumber: Int, type: Int): List<MovieVO>
 
     @Query("DELETE FROM movie")
     fun deleteMovies()

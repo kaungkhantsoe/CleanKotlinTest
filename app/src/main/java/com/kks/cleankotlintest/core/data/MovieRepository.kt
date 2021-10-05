@@ -6,8 +6,9 @@ class MovieRepository(
     private val remoteDataSource: RemoteDataSource,
     private val localSource: LocalDataSource
 ) {
-    fun getRemoteMovieListForPage(page: Int) = remoteDataSource.requestMovieListFor(page)
-    fun getLocalMovieListForPage(page: Int) = localSource.getMovieListFor(page)
+    fun getUpComingMovieListForPage(page: Int) = remoteDataSource.requestMovieListForUpComing(page)
+    fun getPopularMovieListForPage(page: Int) = remoteDataSource.requestMovieListForPopular(page)
+    fun getLocalMovieListForPage(page: Int, type: Int) = localSource.getMovieListFor(page, type)
     fun getMovie(id: Int) = localSource.getMovieWith(id)
     fun insertMovies(list: List<MovieRequest>) = localSource.insertMovieList(list)
     fun changeLikeMovie(movieRequest: MovieRequest): Int = localSource.changeLikeMovie(movieRequest)

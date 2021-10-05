@@ -7,35 +7,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+    <fragment
+        android:id="@+id/nav_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        android:layout_alignParentTop="true"
+        app:navGraph="@navigation/nav_graph" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_movie_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="?android:attr/windowBackground"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_navigation_menu"/>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/progress"
-        android:layout_centerInParent="true"
-        app:cardCornerRadius="20dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ProgressBar
-                android:layout_centerInParent="true"
-                android:layout_width="50dp"
-                android:layout_height="50dp"/>
-
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
 </RelativeLayout>

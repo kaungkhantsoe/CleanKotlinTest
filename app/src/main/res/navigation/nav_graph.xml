@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/popularMoviesFragment">
+
+    <fragment
+        android:id="@+id/upComingMoviesFragment"
+        android:name="com.kks.cleankotlintest.presentation.view.main.upcomingmovies.UpComingMoviesFragment"
+        android:label="UpComingMoviesFragment" />
+    <fragment
+        android:id="@+id/popularMoviesFragment"
+        android:name="com.kks.cleankotlintest.presentation.view.main.popularmovies.PopularMoviesFragment"
+        android:label="PopularMoviesFragment" />
+</navigation>

@@ -18,14 +18,28 @@ data class MovieVO(
 
     var pageNumber: Int? = 1,
 
-    var isLiked: Int
-) : Pageable
+    var isPLiked: Int,
+
+    var isULiked: Int,
+
+    var ptype: Int = 0,
+
+    var utype: Int = 0,
+
+    ) : Pageable
 
 fun DomainMovie.toPresentationModel(): MovieVO = MovieVO(
-    id, original_title ?: "", poster_path ?: "", overview ?: "", isLiked = isLiked
+    id,
+    original_title ?: "",
+    poster_path ?: "",
+    overview ?: "",
+    isPLiked = isPLiked,
+    isULiked = isULiked,
+    ptype = ptype,
+    utype = utype
 )
 
 fun MovieVO.toDomainModel(): DomainMovie = DomainMovie(
-    id, originalTitle, posterPath, overview, isLiked = isLiked
+    id, originalTitle, posterPath, overview, isPLiked = isPLiked, ptype = ptype, isULiked = isULiked,utype = utype
 )
 

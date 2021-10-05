@@ -55,9 +55,10 @@ fun provideInteractors(movieRepository: MovieRepository): Interactors {
     return Interactors(
         GetMovie(movieRepository),
         GetMoviesFromLocal(movieRepository),
-        GetMoviesFromRemote(movieRepository),
+        GetUpcomingMoviesFromRemote(movieRepository),
         InsertMovie(movieRepository),
-        ChangeLikeMovie(movieRepository)
+        ChangeLikeMovie(movieRepository),
+        GetPopularMoviesFromRemote(movieRepository)
     )
 }
 
