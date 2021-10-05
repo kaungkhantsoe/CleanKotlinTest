@@ -12,9 +12,7 @@ import com.kks.cleankotlintest.callback.MainListener
 import com.kks.cleankotlintest.common.*
 import com.kks.cleankotlintest.constants.MovieType
 import com.kks.cleankotlintest.databinding.FragmentUpcomingMoviesBinding
-import com.kks.cleankotlintest.extensions.SnackBarOnRetryListener
-import com.kks.cleankotlintest.extensions.showRetrySnackBar
-import com.kks.cleankotlintest.extensions.showSnackBar
+import com.kks.cleankotlintest.extensions.*
 import com.kks.cleankotlintest.presentation.adapters.MainAdapter
 import com.kks.cleankotlintest.presentation.model.MovieVO
 import com.kks.cleankotlintest.presentation.view.detail.MovieDetailActivity

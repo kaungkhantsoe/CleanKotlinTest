@@ -8,8 +8,8 @@ import com.kks.cleankotlintest.R
 import com.kks.cleankotlintest.databinding.ItemMovieBinding
 import com.kks.cleankotlintest.callback.MainListener
 import com.kks.cleankotlintest.common.BaseAdapter
-import com.kks.cleankotlintest.common.inflate
 import com.kks.cleankotlintest.constants.MovieType
+import com.kks.cleankotlintest.extensions.inflate
 import com.kks.cleankotlintest.extensions.showImage
 import com.kks.cleankotlintest.presentation.model.MovieVO
 

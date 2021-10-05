@@ -1,4 +1,4 @@
-package com.kks.cleankotlintest.common
+package com.kks.cleankotlintest.extensions
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
