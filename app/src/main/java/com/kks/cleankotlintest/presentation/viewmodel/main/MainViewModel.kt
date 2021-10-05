@@ -11,6 +11,7 @@ import com.kks.cleankotlintest.constants.NetworkConstant
 import com.kks.cleankotlintest.core.domain.MovieListRequest
 import com.kks.cleankotlintest.extensions.safeApiCall
 import com.kks.cleankotlintest.presentation.model.MovieVO
+import com.kks.cleankotlintest.presentation.model.toDomainModel
 import com.kks.cleankotlintest.presentation.model.toPresentationModel
 import com.kks.cleankotlintest.util.NetworkListener
 import io.reactivex.rxjava3.core.Flowable
@@ -19,9 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.kks.cleankotlintest.core.domain.MovieRequest as DomainMovie
 
-/**
- * Created by kaungkhantsoe on 18/05/2021.
- **/
 class MainViewModel(
     private val interactors: Interactors,
     private val networkUtil: NetworkListener
@@ -59,22 +57,26 @@ class MainViewModel(
 
                 queryMoviesFromDb()
             }
-//            viewModelScope.launch(Dispatchers.Main) {
-//                _screenState.value = ScreenState.Render(DataState.Success(_loadedMovies))
-//            }
 
             return _screenState
         }
 
     private fun queryMoviesFromDb(page: Int = 1) = viewModelScope.launch(Dispatchers.IO) {
+
         if (page == 1) _loadedMovies.clear()
 
         val movies = interactors.getMovieFromLocal(page).map(DomainMovie::toPresentationModel)
+
         if (movies.isNullOrEmpty()) {
-            if (networkUtil.isNetworkAvailable()) loadMoviesFromRemote(page)
-            else _screenState.postValue(
-                ScreenState.Render(DataState.EndReach)
-            )
+            when {
+                networkUtil.isNetworkAvailable() -> loadMoviesFromRemote(page)
+                page ==1 -> _screenState.postValue(
+                    ScreenState.Render(DataState.Error(NetworkConstant.NO_NETWORK_CONNECT))
+                )
+                else -> _screenState.postValue(
+                    ScreenState.Render(DataState.EndReach)
+                )
+            }
         } else {
             _screenState.postValue(
                 ScreenState.Render(DataState.Success(movies))
@@ -84,6 +86,7 @@ class MainViewModel(
     }
 
     private fun loadMoviesFromRemote(page: Int = 1) = viewModelScope.launch(Dispatchers.IO) {
+
         if (page == 1) _loadedMovies.clear()
 
         try {
@@ -96,7 +99,7 @@ class MainViewModel(
                         is DataState.Error -> {
                             _screenState.postValue(
                                 ScreenState.Render(
-                                    DataState.Error(it.message)
+                                    DataState.Error(it.error)
                                 )
                             )
                         }
@@ -126,7 +129,9 @@ class MainViewModel(
                             }
                         }
                         is DataState.EndReach -> {
-
+                            _screenState.postValue(
+                                ScreenState.Render(DataState.EndReach)
+                            )
                         }
                     }
                 }
@@ -137,5 +142,17 @@ class MainViewModel(
             )
         }
     }
+
+    fun changeLike(movieVO: MovieVO): Int {
+        var position = -1
+        viewModelScope.launch(Dispatchers.IO) {
+            position = interactors.changeLikeMovie(movieVO.toDomainModel())
+        }
+
+        return position
+    }
+
+    fun getDetail(id: Int): MovieVO? =
+        interactors.getMovie(id)?.toPresentationModel()
 
 }

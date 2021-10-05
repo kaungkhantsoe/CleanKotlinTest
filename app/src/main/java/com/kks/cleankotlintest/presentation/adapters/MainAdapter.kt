@@ -3,22 +3,16 @@ package com.kks.cleankotlintest.presentation.adapters
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import com.kks.cleankotlintest.BuildConfig
 import com.kks.cleankotlintest.R
 import com.kks.cleankotlintest.databinding.ItemMovieBinding
 import com.kks.cleankotlintest.callback.MainListener
 import com.kks.cleankotlintest.common.BaseAdapter
 import com.kks.cleankotlintest.common.inflate
+import com.kks.cleankotlintest.extensions.showImage
 import com.kks.cleankotlintest.presentation.model.MovieVO
-import timber.log.Timber
 
-/**
- * Created by kaungkhantsoe on 5/17/21.
- **/
 class MainAdapter(
-    private val requestManager: RequestManager,
     private val listener: MainListener
 ) : BaseAdapter() {
 
@@ -49,15 +43,28 @@ class MainAdapter(
 
         fun bind(movieVO: MovieVO) {
 
-            Timber.d("Data $movieVO")
+            view.context.showImage(
+                binding.ivLike,
+                if (movieVO.isLiked == 1) R.drawable.ic_like else R.drawable.ic_like_disable
+            )
 
-            Glide.with(view.context)
-                .load("${BuildConfig.IMAGE_URL}${movieVO.posterPath}")
-                .into(binding.imageMoviePoster)
-            binding.textMovieTitle.text = "${adapterPosition+1} ${movieVO.originalTitle}"
+            view.context.showImage(
+                binding.imageMoviePoster,
+                "${BuildConfig.IMAGE_URL}${movieVO.posterPath}"
+            )
+
+            binding.textMovieTitle.text = view.context.getString(
+                R.string.movie_title,
+                (adapterPosition + 1).toString(),
+                movieVO.originalTitle
+            )
 
             itemView.setOnClickListener {
-                listener.onClickMovie(movieVO.id,binding.imageMoviePoster)
+                listener.onClickMovie(movieVO.id, adapterPosition)
+            }
+
+            binding.ivLike.setOnClickListener {
+                listener.onClickLike(movieVO.id, adapterPosition)
             }
 
         }

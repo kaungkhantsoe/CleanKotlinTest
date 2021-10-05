@@ -4,9 +4,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.kks.cleankotlintest.common.Pageable
 import com.kks.cleankotlintest.core.domain.MovieRequest as DomainMovie
-/**
- * Created by kaungkhantsoe on 5/18/21.
- **/
 
 @Entity(tableName = "movie")
 data class MovieVO(
@@ -19,14 +16,16 @@ data class MovieVO(
 
     val overview: String,
 
-    var pageNumber: Int? = 1
-    ): Pageable
+    var pageNumber: Int? = 1,
+
+    var isLiked: Int
+) : Pageable
 
 fun DomainMovie.toPresentationModel(): MovieVO = MovieVO(
-    id,original_title ?: "",poster_path ?: "",overview ?: ""
+    id, original_title ?: "", poster_path ?: "", overview ?: "", isLiked = isLiked
 )
 
 fun MovieVO.toDomainModel(): DomainMovie = DomainMovie(
-    id,originalTitle,posterPath,overview
+    id, originalTitle, posterPath, overview, isLiked = isLiked
 )
 

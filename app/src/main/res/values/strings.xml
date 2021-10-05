@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CleanKotlinTest</string>
+    <string name="oops_something_went_wrong">Oops! Something went wrong!</string>
+    <string name="retry">Retry</string>
+    <string name="you_have_reached_the_end">"You have reached the end"</string>
+    <string name="movie_title">%1$s %2$s</string>
 </resources>

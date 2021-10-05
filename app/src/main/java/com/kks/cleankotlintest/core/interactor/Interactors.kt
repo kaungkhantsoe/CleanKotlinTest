@@ -4,5 +4,6 @@ data class Interactors(
     val getMovie: GetMovie,
     val getMovieFromLocal: GetMoviesFromLocal,
     val getMoviesFromRemote: GetMoviesFromRemote,
-    val insertMovie: InsertMovie
+    val insertMovie: InsertMovie,
+    val changeLikeMovie: ChangeLikeMovie
 )

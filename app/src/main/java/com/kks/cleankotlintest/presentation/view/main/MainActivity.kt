@@ -1,41 +1,35 @@
 package com.kks.cleankotlintest.presentation.view.main
 
 import android.content.Intent
-import android.os.Handler
 import android.view.LayoutInflater
-import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.RequestManager
-import com.google.android.material.snackbar.Snackbar
+import com.kks.cleankotlintest.R
 import com.kks.cleankotlintest.databinding.ActivityMainBinding
 import com.kks.cleankotlintest.presentation.adapters.MainAdapter
 import com.kks.cleankotlintest.callback.MainListener
 import com.kks.cleankotlintest.common.*
+import com.kks.cleankotlintest.extensions.SnackBarOnRetryListener
+import com.kks.cleankotlintest.extensions.showRetrySnackBar
+import com.kks.cleankotlintest.extensions.showSnackBar
 import com.kks.cleankotlintest.presentation.model.MovieVO
-import org.koin.android.ext.android.inject
 import com.kks.cleankotlintest.presentation.view.detail.MovieDetailActivity
 import com.kks.cleankotlintest.presentation.viewmodel.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class MainActivity : ViewBindingActivity<ActivityMainBinding>(),
     SwipeRefreshLayout.OnRefreshListener,
     SmartScrollListener.OnSmartScrollListener,
-    MainListener {
-
-    val requestManager: RequestManager by inject()
+    MainListener, SnackBarOnRetryListener {
 
     private val viewModel: MainViewModel by viewModel()
 
     private lateinit var layoutManager: LinearLayoutManager
 
     private val adapter by lazy {
-        MainAdapter(requestManager, this)
+        MainAdapter(this)
     }
 
     override val bindingInflater: (LayoutInflater) -> ActivityMainBinding
@@ -56,7 +50,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(),
 
     private fun updateUI(screenState: ScreenState<DataState<Nothing>>) {
         when (screenState) {
-            ScreenState.Loading -> {
+            is ScreenState.Loading -> {
                 binding.progress.visible(true)
             }
             is ScreenState.Render -> processRenderState(screenState.renderState)
@@ -64,30 +58,19 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(),
     }
 
     private fun processRenderState(renderState: DataState<Nothing>) {
-
-        //Just to make progress visible a while in case of fast data fetch
-        Handler(mainLooper).postDelayed({
-            binding.progress.gone(true)
-        }, 1000)
+        binding.progress.gone(true)
 
         when (renderState) {
             is DataState.Success -> {
                 if (renderState.data is List<*>) {
                     addMovies(renderState.data as List<MovieVO>)
-//                    Handler(Looper.getMainLooper()).postDelayed(Runnable {
-//                        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-//                    },10000)
                 }
             }
             is DataState.Error -> {
-                showToast(renderState.message.toString())
+                showRetrySnackBar(binding.contextView, renderState.error.title, this@MainActivity)
             }
             is DataState.EndReach -> {
-                Snackbar.make(
-                    binding.contextView,
-                    "You have reached the end",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                showSnackBar(binding.contextView, getString(R.string.you_have_reached_the_end))
             }
         }
     }
@@ -107,22 +90,37 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>(),
         viewModel.pageNumber++
     }
 
-    override fun onClickMovie(id: Int, view: View) {
+    private var detailMovieId = -1
+    private var detailMoviePosition = -1
 
-        val intent = Intent(this@MainActivity, MovieDetailActivity::class.java)
-        intent.putExtra(MovieDetailActivity.ID_EXTRA, id)
+    private var detailLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (detailMovieId != -1)
+                viewModel.getDetail(detailMovieId)?.let {
+                    adapter.update(it, detailMoviePosition)
+                }
+        }
 
-        val activityOptions: ActivityOptionsCompat =
-            ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this@MainActivity,
-                Pair(
-                    view,
-                    MovieDetailActivity.VIEW_NAME_MOVIE_POSTER
-                )
+    override fun onClickMovie(id: Int, position: Int) {
+        detailMovieId = id
+        detailMoviePosition = position
+        detailLauncher.launch(
+            Intent(this@MainActivity, MovieDetailActivity::class.java).apply {
+                putExtra(MovieDetailActivity.ID_EXTRA, id)
+            }
+        )
+    }
 
-            )
+    override fun onClickLike(id: Int, position: Int) {
+        val item = adapter.getItemsList()[position] as MovieVO
+        item.isLiked = if (item.isLiked == 0) 1 else 0
+        viewModel.changeLike(item)
+        adapter.update(item, position)
+    }
 
-        ActivityCompat.startActivity(this@MainActivity, intent, activityOptions.toBundle())
+    override fun onRetry() {
+        adapter.clear()
+        viewModel.pageNumber = 1
     }
 
 }

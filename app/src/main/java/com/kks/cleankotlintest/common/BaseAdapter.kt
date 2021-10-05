@@ -1,7 +1,6 @@
 package com.kks.cleankotlintest.common
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -156,7 +155,7 @@ abstract class BaseAdapter(items: List<Pageable>? = null) : RecyclerView.Adapter
     fun update(newData: Pageable, position: Int) {
         if (0 <= position && position < itemsList.size) {
             itemsList[position] = newData
-            //notifyItemChanged(position);
+            notifyItemChanged(position);
         } else {
             throw ArrayIndexOutOfBoundsException("Inserted position most greater than 0 and less than data size")
         }

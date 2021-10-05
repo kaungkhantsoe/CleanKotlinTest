@@ -38,10 +38,6 @@ abstract class ViewBindingActivity<VB : ViewBinding> : AppCompatActivity() {
         _binding = null
     }
 
-    fun showToast(string: String = "") {
-        Toast.makeText(this, string, Toast.LENGTH_SHORT).show()
-    }
-
     protected open fun setupToolbar(toolbar: Toolbar, isChild: Boolean) {
 
         if (isChild) {

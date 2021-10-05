@@ -7,8 +7,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import com.bumptech.glide.RequestManager
+import com.kks.cleankotlintest.BuildConfig
+import com.kks.cleankotlintest.R
 import com.kks.cleankotlintest.databinding.ActivityMovieDetailBinding
 import com.kks.cleankotlintest.common.ViewBindingActivity
+import com.kks.cleankotlintest.extensions.showImage
 import com.kks.cleankotlintest.presentation.model.MovieVO
 import com.kks.cleankotlintest.presentation.viewmodel.detail.MovieDetailViewModel
 import org.koin.android.ext.android.inject
@@ -16,16 +19,14 @@ import org.koin.android.ext.android.inject
 /**
  * Created by kaungkhantsoe on 19/05/2021.
  **/
-class MovieDetailActivity: ViewBindingActivity<ActivityMovieDetailBinding>() {
+class MovieDetailActivity : ViewBindingActivity<ActivityMovieDetailBinding>() {
 
-    private val viewModel : MovieDetailViewModel by viewModel()
+    private val viewModel: MovieDetailViewModel by viewModel()
 
     companion object {
         val ID_EXTRA = "detail:_id"
         val VIEW_NAME_MOVIE_POSTER = "detail:image"
     }
-
-    val requestManager: RequestManager by inject()
 
     var movieVO: MovieVO? = null
 
@@ -44,29 +45,32 @@ class MovieDetailActivity: ViewBindingActivity<ActivityMovieDetailBinding>() {
         ViewCompat.setTransitionName(binding.imageMovie, VIEW_NAME_MOVIE_POSTER);
         // END_INCLUDE(detail_set_view_name)
 
-        movieVO = viewModel.getDetail(intent.getIntExtra(ID_EXTRA,0))
+        movieVO = viewModel.getDetail(intent.getIntExtra(ID_EXTRA, 0))
 
+        binding.ivLike.setOnClickListener {
+            movieVO?.let {
+                it.isLiked = if (it.isLiked == 0) 1 else 0
+                viewModel.changeLike(it)
+                showImage(
+                    binding.ivLike,
+                    if (movieVO?.isLiked == 0) R.drawable.ic_like_disable else R.drawable.ic_like
+                )
+            }
+        }
         loadItem()
     }
 
     private fun loadItem() {
         binding.textOverview.text = movieVO?.overview
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && addTransitionListener()) {
-            // If we're running on Lollipop and we have added a listener to the shared element
-            // transition, load the thumbnail. The listener will load the full-size image when
-            // the transition is complete.
-            requestManager.load("https://image.tmdb.org/t/p/w500${movieVO?.posterPath}")
-                .into(binding.imageMovie)
-//            loadThumbnail()
-        } else {
-            // If all other cases we should just load the full-size image now
-//            loadFullSizeImage()
-        }
+        showImage(binding.imageMovie, "${BuildConfig.IMAGE_URL}${movieVO?.posterPath}")
+        showImage(
+            binding.ivLike,
+            if (movieVO?.isLiked == 0) R.drawable.ic_like_disable else R.drawable.ic_like
+        )
     }
 
     @RequiresApi(21)
-    private fun addTransitionListener() : Boolean {
+    private fun addTransitionListener(): Boolean {
         val transition = window.sharedElementEnterTransition
 
         if (transition != null) {

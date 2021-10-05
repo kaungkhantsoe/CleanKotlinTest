@@ -10,4 +10,5 @@ class MovieRepository(
     fun getLocalMovieListForPage(page: Int) = localSource.getMovieListFor(page)
     fun getMovie(id: Int) = localSource.getMovieWith(id)
     fun insertMovies(list: List<MovieRequest>) = localSource.insertMovieList(list)
+    fun changeLikeMovie(movieRequest: MovieRequest): Int = localSource.changeLikeMovie(movieRequest)
 }

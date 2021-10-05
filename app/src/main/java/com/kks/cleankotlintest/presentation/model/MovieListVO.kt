@@ -51,7 +51,7 @@ data class MovieListVO(
 fun DomainMovieList.toPresentationModel(): MovieListVO = MovieListVO (
     page,
     results?.map {
-        return@map MovieVO(it.id,it.original_title ?: "",it.poster_path ?: "",it.overview ?: "",page)
+        return@map MovieVO(it.id,it.original_title ?: "",it.poster_path ?: "",it.overview ?: "",page,it.isLiked)
     },
     total_pages,
     total_results,

@@ -8,8 +8,7 @@ import com.kks.cleankotlintest.core.domain.MovieRequest as DomainMovie
 
 class LocalSource(
     private val db: AppDb
-): LocalDataSource
-{
+) : LocalDataSource {
     override fun getMovieListFor(page: Int): List<DomainMovie> =
         db.MovieDao().getMoviesFrom(page).map(MovieVO::toDomainModel)
 
@@ -20,5 +19,8 @@ class LocalSource(
 
     override fun insertMovieList(list: List<DomainMovie>) =
         db.MovieDao().insertMovies(list.map(DomainMovie::toPresentationModel))
+
+    override fun changeLikeMovie(movieRequest: DomainMovie): Int =
+        db.MovieDao().changeLikedMovie(movieRequest.toPresentationModel())
 
 }

@@ -1,9 +1,6 @@
 package com.kks.cleankotlintest.framework.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.kks.cleankotlintest.presentation.model.MovieVO
 
 /**
@@ -26,4 +23,7 @@ interface MovieDao {
 
     @Query("DELETE FROM movie")
     fun deleteMovies()
+
+    @Update
+    fun changeLikedMovie(movieVO: MovieVO): Int
 }

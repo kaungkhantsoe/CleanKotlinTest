@@ -2,10 +2,7 @@ package com.kks.cleankotlintest.extensions
 
 import com.kks.cleankotlintest.common.DataState
 import com.kks.cleankotlintest.constants.NetworkConstant
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeout
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.HttpURLConnection.*
@@ -19,7 +16,6 @@ fun <T> safeApiCall(
 ): DataState<T?> {
 
         try {
-            // throws TimeoutCancellationException
             return apiCall()?.let { DataState.Success(it) } ?: DataState.Error(NetworkConstant.UNKNOWN_ERROR)
 
         } catch (throwable: Throwable) {
