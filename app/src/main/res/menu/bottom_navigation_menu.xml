@@ -1,10 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/upComingMoviesFragment"
-        android:icon="@drawable/ic_clock"
-        android:title="Upcoming"/>
-    <item
         android:id="@+id/popularMoviesFragment"
         android:icon="@drawable/ic_fire"
         android:title="Popular"/>
+
+    <item
+        android:id="@+id/upComingMoviesFragment"
+        android:icon="@drawable/ic_clock"
+        android:title="Upcoming"/>
+
 </menu>
