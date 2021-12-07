@@ -1,2 +1,2 @@
 # CleanKotlinTest
-Clean Architecture Test with Koin DI, Rxkotlin, MVVM
+MovieDB, Clean Architecture Test with Koin DI, Rxkotlin, MVVM
