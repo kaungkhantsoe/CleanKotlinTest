@@ -7,10 +7,10 @@ import com.kks.cleankotlintest.extensions.executeOrThrow
 import com.kks.cleankotlintest.network.ApiInterface
 
 class RemoteSource(private val apiInterface: ApiInterface) : RemoteDataSource {
-    override fun requestMovieListForUpComing(page: Int): MovieListRequest =
+    override fun requestMovieListForUpComing(page: Int): MovieListRequest? =
         apiInterface.getMoviesUpComing(BuildConfig.API_KEY, "en-US", page).executeOrThrow()
 
-    override fun requestMovieListForPopular(page: Int): MovieListRequest =
+    override fun requestMovieListForPopular(page: Int): MovieListRequest? =
         apiInterface.getMoviesPopular(BuildConfig.API_KEY, "en-US", page).executeOrThrow()
 
 }

@@ -49,7 +49,7 @@ class PopularMoviesFragment : ViewBindingFragment<FragmentPopularMoviesBinding>(
     }
 
 
-    private fun updateUI(screenState: ScreenState<DataState<Nothing>>) {
+    private fun updateUI(screenState: ScreenState<DataState<List<MovieVO>>>) {
         when (screenState) {
             is ScreenState.Loading -> {
                 binding.progress.visible(true)
@@ -58,19 +58,17 @@ class PopularMoviesFragment : ViewBindingFragment<FragmentPopularMoviesBinding>(
         }
     }
 
-    private fun processRenderState(renderState: DataState<Nothing>) {
+    private fun processRenderState(renderState: DataState<List<MovieVO>>) {
         binding.progress.gone(true)
 
         when (renderState) {
             is DataState.Success -> {
-                if (renderState.data is List<*>) {
-                    addMovies(renderState.data as List<MovieVO>)
-                }
+                addMovies(renderState.data)
             }
             is DataState.Error -> {
                 requireContext().showRetrySnackBar(
                     binding.contextView,
-                    renderState.error.title,
+                    renderState.error,
                     this@PopularMoviesFragment
                 )
             }
